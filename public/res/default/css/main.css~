@@ -1,0 +1,120 @@
+/* @Group layout */
+html,body{}
+a { /*color: #bb986f;*/ text-decoration: none; }
+a:visited { /*color: #551a8b;*/text-decoration: none; }
+a:hover { /*color: #bb986f;*/text-decoration: none; }
+a:focus { outline: thin dotted;text-decoration: none; }
+a:hover, a:active { outline: 0; }
+body {
+    background-color: #fff;
+    color:#111;
+    font-family: Arial;
+    text-align:center;
+}
+div {
+    text-align: left;
+}
+#wrap {
+    background-color: #fff;
+    border: 2px solid #F7F7F5;
+    margin: 0 auto;
+    width:806px;
+}
+#header{
+    background: #fff url(../../../res/default/img/bck_header.jpg) no-repeat left top;
+    height: 328px;
+    position:relative;
+}
+#nav{
+    height: 35px;
+    right: 14px;
+    position: absolute;
+    top: 293px;
+    width: 210px;
+}
+#content{
+   
+}
+#footer{
+    border-top: 1px solid #ED5A6C;
+    height: 55px;
+}
+/* @End group layout */
+
+/* @Group header */
+#header h1 a,#header h1 a:hover,#header h1 a:focus {
+   display: block;
+   height: 328px;
+   text-indent: -9999px;
+}
+/* @End header */
+
+/* @Group nav menu */
+#nav ul{
+    width: 210px;
+    height: 35px;
+}
+#nav ul li{
+    display:inline;
+    background-color: #BB986F;
+}
+#nav ul li a,#nav ul li a:hover{
+    color: #E94653;
+    float:left;
+    line-height: 26px;
+    text-align: center;
+    text-indent: -9999px;
+    text-transform: uppercase;
+}
+/* @End nav menu */
+
+/* @Group Footer */
+#footer #copyright{
+    color: #111;
+    font-size: 13px;
+    line-height: 55px;
+    text-align: center;
+}
+/* @End footer */
+
+/* @Group Form */
+input{
+	font-size: 1em;
+	padding:3px 0px;
+	border: 1px solid #111;
+	background-color: #fff;
+}
+input:hover,input:focus, textarea:hover, select:hover{
+	border: 1px solid #111;
+	background-color: #fff;
+}
+textarea {
+   padding:3px 0px;
+   border: 1px solid #111;
+   background-color: #fff;
+   font-size: 1em;
+   font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+select{
+   padding:3px 0px;
+   border: 1px solid #111;
+   background-color: #fff;
+   font-size: 1em;
+}
+span.required{
+	color: #DA0517;
+	font-weight: bold;
+}
+ul.errors li{
+    font-size: 0.7em;
+    color:#B94A48;
+}
+input.error,textarea.error,select.error{
+    border: 1px solid #DA0517;
+}
+
+/* @End group form */
+
+
+
+
