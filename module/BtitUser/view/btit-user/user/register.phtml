@@ -1,0 +1,30 @@
+<?php
+$title = 'Register';
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+<?php
+$form = $this->registerForm;
+$form->prepare();
+$form->setAttribute('action', $this->url('btituser_route/register'));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+echo $this->formElement($form->get('registerCsrf'))
+?>
+<fieldset class="clearfix">
+    <div class="frm-field-sx"><?php echo $this->formRow($form->get('firstname')); ?></div>
+    <div class="frm-field-dx"><?php echo $this->formRow($form->get('surname')); ?></div>  
+</fieldset>
+<fieldset class="clearfix">
+    <div class="frm-field-sx"><?php echo $this->formRow($form->get('email')); ?></div>
+    <div class="frm-field-dx"><?php echo $this->formRow($form->get('username')); ?></div>
+</fieldset>
+<fieldset class="clearfix">
+    <div class="frm-field-sx"><?php echo $this->formRow($form->get('password')); ?></div>
+    <div class="frm-field-dx"><?php echo $this->formRow($form->get('repassword')); ?></div>
+</fieldset>
+<fieldset>
+    <div id="action" class="clearfix"><?php echo $this->formSubmit($form->get('sbt-user')); ?></div>
+</fieldset>
+<?php echo $this->form()->closeTag();?>
+

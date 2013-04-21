@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+        <meta charset="utf-8" />
+        <?php echo $this->headTitle($this->settings('site')->title)->setSeparator(' - ')->setAutoEscape(false); ?>
+        <meta name="robots" content="index,follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <?php echo $this->ogMetaTags(); ?>
+        
+        <meta name="description" content="" />
+        <meta name="author" content="whisher">
+        <meta name="Copyright" content="Copyright 2012. All Rights Reserved." />
+        <link rel="shortcut icon" href="<?php echo $this->basePath('/res/favicon/favicon.ico'); ?>" />
+        <link rel="bookmark" href="<?php echo $this->basePath('/res/favicon/favicon.ico'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->basePath('/res/default/css/vendor/reset.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->basePath('/res/default/css/main.css?'.time()); ?>" />
+        <!--[if lt IE 9]>
+            <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <script type="text/javascript">
+            var BT = {};
+            BT.absoluteUrl = '<?php echo $this->absoluteUrl(); ?>';
+            BT.basePath = '<?php echo $this->basePath(); ?>';
+            BT.channelUrl =  '<?php echo $this->absoluteUrl().'/channel.html'; ?>';
+            BT.fbAppId = <?php echo $this->settings('fb')->id; ?>;
+            BT.fbAppTitle = '<?php echo $this->settings('fb')->title; ?>';
+        </script>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <div id="wrap">
+            <header id="header">
+                <h1><a href="<?php echo $this->url('home') ?>" title="home">FabiosWeb</a></h1>
+            </header>
+            <nav id="nav">Menu</nav>
+            <article id="content"><?php echo $this->content; ?></article>
+            <footer id="footer">Footer</footer>
+        </div>
+        <script type="text/javascript" src="<?php echo $this->basePath('/res/default/js/plugins.js?'.time()); ?>"></script>
+    </body>
+</html>

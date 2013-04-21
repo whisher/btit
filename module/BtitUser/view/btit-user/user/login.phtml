@@ -1,0 +1,30 @@
+<?php
+$title = 'Login';
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+<?php
+$form = $this->loginForm;
+$form->prepare();
+$form->setAttribute('action', $this->url('btituser_route/login'));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+echo $this->formElement($form->get('loginCsrf'))
+?>
+<fieldset class="clearfix">
+    <?php echo $this->formElementErrors($form->get('identity')) ?>
+    <div class="frm-field-sx">
+        <?php echo $this->formLabel($form->get('identity')) ?>
+        <?php echo $this->formInput($form->get('identity')) ?>
+    </div>
+    <div class="frm-field-dx">
+        <?php echo $this->formLabel($form->get('credential')) ?>
+        <?php echo $this->formInput($form->get('credential')) ?>
+    </div>  
+</fieldset>
+<fieldset>
+    <div id="action" class="clearfix"><?php echo $this->formSubmit($form->get('sbt-user')); ?></div>
+</fieldset>
+<?php echo $this->form()->closeTag();?>
+<div id="go-to-register">Not registered? <a href="<?php echo $this->url('btituser_route/register'); ?>">Sign up!</a></div>
+
