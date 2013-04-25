@@ -6,18 +6,10 @@ use Zend\Authentication\Storage;
 
 abstract class AbstractAdapter implements ChainableAdapter
 {
-    /**
-     * @var Storage\StorageInterface
-     */
+   
     protected $storage;
 
-    /**
-     * Returns the persistent storage handler
-     *
-     * Session storage is used by default unless a different storage adapter has been set.
-     *
-     * @return Storage\StorageInterface
-     */
+    
     public function getStorage()
     {
         if (null === $this->storage) {
@@ -27,12 +19,7 @@ abstract class AbstractAdapter implements ChainableAdapter
         return $this->storage;
     }
 
-    /**
-     * Sets the persistent storage handler
-     *
-     * @param  Storage\StorageInterface $storage
-     * @return AbstractAdapter Provides a fluent interface
-     */
+   
     public function setStorage(Storage\StorageInterface $storage)
     {
         $this->storage = $storage;

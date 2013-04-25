@@ -129,7 +129,7 @@ class Db implements Storage\StorageInterface, ServiceManagerAwareInterface
     public function getMapper()
     {
         if (null === $this->mapper) {
-            $this->mapper = $this->getServiceManager()->get('zfcuser_user_mapper');
+            $this->mapper = $this->getServiceManager()->get('btituser_user_mapper');
         }
         return $this->mapper;
     }

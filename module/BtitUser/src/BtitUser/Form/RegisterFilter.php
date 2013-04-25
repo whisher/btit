@@ -21,7 +21,7 @@ class RegisterFilter extends ProvidesEventsInputFilter
         $this->add(array(
             'name'       => 'firstname',
             'required'   => true,
-            'filters'    => array(array('name' => 'StringTrim','name' => 'StripTags',)),
+            'filters'    => array(array('name' => 'StringTrim','name' => 'StripTags')),
             'validators' => array(
                 array(
                     'name'    => 'StringLength',

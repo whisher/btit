@@ -3,8 +3,8 @@ namespace BtitUser\Form;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
-use BtitUser\Form\ProvidesEventsForm;
-use ZfcUser\Options\AuthenticationOptionsInterface;
+use BtitBase\Form\ProvidesEventsForm;
+
 
 class Login extends ProvidesEventsForm
 {
@@ -44,6 +44,7 @@ class Login extends ProvidesEventsForm
             'name' => 'sbt-user',
             'attributes' => array(
                 'type'  => 'submit',
+                'value'=>'Login',
                 'id' => 'sbt-user',
                 'class'=>'sbt'
             ),

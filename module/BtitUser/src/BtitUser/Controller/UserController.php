@@ -15,6 +15,8 @@ class UserController extends AbstractActionController
    
     const ROUTE_REGISTER     = 'btituser_route/register';
     const ROUTE_LOGIN        = 'btituser_route/login';
+    const ROUTE_LOGOUT       = 'btituser_route/login';
+    const ROUTE_JUST_LOGGED  = 'btituser_route';
     const CONTROLLER_NAME    = 'btituser_controller';
     
     protected $userService;
@@ -24,8 +26,9 @@ class UserController extends AbstractActionController
     
     public function indexAction()
     {   
-        
-        
+        if (!$this->btitUserAuthentication()->hasIdentity()) {
+            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+        }
     }
     
     public function registerAction()
@@ -53,22 +56,56 @@ class UserController extends AbstractActionController
     
     public function loginAction()
     {
+        if ($this->btitUserAuthentication()->hasIdentity()) {
+            return $this->redirect()->toRoute(static::ROUTE_JUST_LOGGED);
+        }
         $request = $this->getRequest();
+        
         $form    = $this->getLoginForm();
         if (!$request->isPost()) {
             return array('loginForm' => $form);
         }
         $form->setData($request->getPost());
-
         if (!$form->isValid()) {
             $this->flashMessenger()->setNamespace('btituser-login-form')->addMessage($this->failedLoginMessage);
-            return $this->redirect()->toUrl($this->url()->fromRoute(static::ROUTE_LOGIN));
+            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
         }
         $this->btitUserAuthentication()->getAuthAdapter()->resetAdapters();
         $this->btitUserAuthentication()->getAuthService()->clearIdentity();
         return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
     }
 
+    public function authenticateAction()
+    {
+        $adapter = $this->btitUserAuthentication()->getAuthAdapter();
+        
+        $result = $adapter->prepareForAuthentication($this->getRequest());
+
+        // Return early if an adapter returned a response
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $auth = $this->btitUserAuthentication()->getAuthService()->authenticate($adapter);
+
+        if (!$auth->isValid()) {
+            $this->flashMessenger()->setNamespace('btituser-login-form')->addMessage($this->failedLoginMessage);
+            $adapter->resetAdapters();
+            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+        }
+
+        
+
+        return $this->redirect()->toRoute(static::ROUTE_JUST_LOGGED);
+    }
+    
+    public function logoutAction()
+    {
+        $this->btitUserAuthentication()->getAuthAdapter()->resetAdapters();
+        $this->btitUserAuthentication()->getAuthAdapter()->logoutAdapters();
+        $this->btitUserAuthentication()->getAuthService()->clearIdentity();
+        return $this->redirect()->toRoute(static::ROUTE_LOGOUT);
+    }
     
     public function getRegisterForm()
     {

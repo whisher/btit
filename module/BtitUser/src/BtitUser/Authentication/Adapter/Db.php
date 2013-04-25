@@ -12,26 +12,13 @@ use BtitUser\Mapper\User as UserMapperInterface;
 
 class Db extends AbstractAdapter implements ServiceManagerAwareInterface
 {
-    /**
-     * @var UserMapperInterface
-     */
+    const COST = 14;
+    
     protected $mapper;
-
-    /**
-     * @var closure / invokable object
-     */
-    protected $credentialPreprocessor;
-
-    /**
-     * @var ServiceManager
-     */
     protected $serviceManager;
-
-    /**
-     * @var AuthenticationOptionsInterface
-     */
-    protected $options;
-
+    protected $credentialsOptions = array('username','email');
+    protected $notAllowedState = array('2'=>'A record with the supplied identity is not active.');
+    
     public function authenticate(AuthEvent $e)
     {
         if ($this->isSatisfied()) {
@@ -44,11 +31,9 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
 
         $identity   = $e->getRequest()->getPost()->get('identity');
         $credential = $e->getRequest()->getPost()->get('credential');
-        $credential = $this->preProcessCredential($credential);
         $userObject = NULL;
 
-        // Cycle through the configured identity sources and test each
-        $fields = $this->getOptions()->getAuthIdentityFields();
+        $fields = $this->credentialsOptions;
         while ( !is_object($userObject) && count($fields) > 0 ) {
             $mode = array_shift($fields);
             switch ($mode) {
@@ -68,18 +53,16 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
             return false;
         }
 
-        if ($this->getOptions()->getEnableUserState()) {
-            // Don't allow user to login if state is not in allowed list
-            if (!in_array($userObject->getState(), $this->getOptions()->getAllowedLoginStates())) {
-                $e->setCode(AuthenticationResult::FAILURE_UNCATEGORIZED)
-                  ->setMessages(array('A record with the supplied identity is not active.'));
-                $this->setSatisfied(false);
-                return false;
-            }
+        // Don't allow user to login if state is not in allowed list
+        if (in_array($userObject->getState(), array_keys($this->notAllowedState))) {
+            $e->setCode(AuthenticationResult::FAILURE_UNCATEGORIZED)
+            ->setMessages(array($this->notAllowedState[$userObject->getState()]));
+            $this->setSatisfied(false);
+            return false;
         }
-
+        
         $bcrypt = new Bcrypt();
-        $bcrypt->setCost($this->getOptions()->getPasswordCost());
+        $bcrypt->setCost(static::COST);
         if (!$bcrypt->verify($credential,$userObject->getPassword())) {
             // Password does not match
             $e->setCode(AuthenticationResult::FAILURE_CREDENTIAL_INVALID)
@@ -90,8 +73,6 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
 
         // Success!
         $e->setIdentity($userObject->getId());
-        // Update user's password hash if the cost parameter has changed
-        $this->updateUserPasswordHash($userObject, $credential, $bcrypt);
         $this->setSatisfied(true);
         $storage = $this->getStorage()->read();
         $storage['identity'] = $e->getIdentity();
@@ -100,107 +81,31 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
           ->setMessages(array('Authentication successful.'));
     }
 
-    protected function updateUserPasswordHash($userObject, $password, $bcrypt)
-    {
-        $hash = explode('$', $userObject->getPassword());
-        if ($hash[2] === $bcrypt->getCost()) return;
-        $userObject->setPassword($bcrypt->create($password));
-        $this->getMapper()->update($userObject);
-        return $this;
-    }
+    
 
-    public function preprocessCredential($credential)
-    {
-        $processor = $this->getCredentialPreprocessor();
-        if (is_callable($processor)) {
-            return $processor($credential);
-        }
-        return $credential;
-    }
-
-    /**
-     * getMapper
-     *
-     * @return UserMapperInterface
-     */
     public function getMapper()
     {
         if (null === $this->mapper) {
-            $this->mapper = $this->getServiceManager()->get('zfcuser_user_mapper');
+            $this->setMapper($this->getServiceManager()->get('btituser_user_mapper'));
         }
         return $this->mapper;
     }
 
-    /**
-     * setMapper
-     *
-     * @param UserMapperInterface $mapper
-     * @return Db
-     */
-    public function setMapper(UserMapperInterface $mapper)
+    protected function setMapper(UserMapperInterface $mapper)
     {
         $this->mapper = $mapper;
         return $this;
     }
 
-    /**
-     * Get credentialPreprocessor.
-     *
-     * @return \callable
-     */
-    public function getCredentialPreprocessor()
-    {
-        return $this->credentialPreprocessor;
-    }
-
-    /**
-     * Set credentialPreprocessor.
-     *
-     * @param $credentialPreprocessor the value to be set
-     */
-    public function setCredentialPreprocessor($credentialPreprocessor)
-    {
-        $this->credentialPreprocessor = $credentialPreprocessor;
-        return $this;
-    }
-
-    /**
-     * Retrieve service manager instance
-     *
-     * @return ServiceManager
-     */
     public function getServiceManager()
     {
         return $this->serviceManager;
     }
 
-    /**
-     * Set service manager instance
-     *
-     * @param ServiceManager $locator
-     * @return void
-     */
     public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
     }
 
-    /**
-     * @param AuthenticationOptionsInterface $options
-     */
-    public function setOptions(AuthenticationOptionsInterface $options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * @return AuthenticationOptionsInterface
-     */
-    public function getOptions()
-    {
-        if (!$this->options instanceof AuthenticationOptionsInterface) {
-            $this->setOptions($this->getServiceManager()->get('zfcuser_module_options'));
-        }
-        return $this->options;
-    }
+    
 }

@@ -5,6 +5,7 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Validator\Db\NoRecordExists;
+
 class Module
 {
     
@@ -45,6 +46,21 @@ class Module
         );
     }
     
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'btitUserDisplayName' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\BtitUserDisplayName();
+                    $viewHelper->setAuthService($locator->get('btituser_auth_service'));
+                    return $viewHelper;
+                }
+            ),
+        );
+
+    }
+    
     public function getServiceConfig()
     {
         return array(
@@ -63,9 +79,8 @@ class Module
                 },
                'btituser_auth_adapter_chain' => 'BtitUser\Authentication\Adapter\AdapterChainServiceFactory',
                'btituser_login_form' => function($sm) {
-                    $options = $sm->get('zfcuser_module_options');
-                    $form = new Form\Login(null, $options);
-                    $form->setInputFilter(new Form\LoginFilter($options));
+                    $form = new Form\Login('frm-login');
+                    $form->setInputFilter(new Form\LoginFilter());
                     return $form;
                 },
                'btituser_form_register' => function ($sm) {

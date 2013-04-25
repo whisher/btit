@@ -1,28 +1,29 @@
 <?php
+namespace BtitUser\Form;
 
-namespace ZfcUser\Form;
-
-use ZfcBase\InputFilter\ProvidesEventsInputFilter;
-use ZfcUser\Options\AuthenticationOptionsInterface;
+use BtitBase\InputFilter\ProvidesEventsInputFilter;
 
 class LoginFilter extends ProvidesEventsInputFilter
 {
-    public function __construct(AuthenticationOptionsInterface $options)
+    public function __construct()
     {
-        $identityParams = array(
+        
+         $this->add(array(
             'name'       => 'identity',
             'required'   => true,
-            'validators' => array()
-        );
-
-        $identityFields = $options->getAuthIdentityFields();
-        if ($identityFields == array('email')) {
-            $validators = array('name' => 'EmailAddress');
-            array_push($identityParams['validators'], $validators);
-        }
-
-        $this->add($identityParams);
-
+            'validators' => array(
+                array(
+                    'name'    => 'StringLength',
+                    'options' => array(
+                        'min' => 6,
+                    ),
+                ),
+            ),
+            'filters'   => array(
+                array('name' => 'StringTrim','name' => 'StripTags'),
+            ),
+        ));
+    
         $this->add(array(
             'name'       => 'credential',
             'required'   => true,
@@ -35,7 +36,7 @@ class LoginFilter extends ProvidesEventsInputFilter
                 ),
             ),
             'filters'   => array(
-                array('name' => 'StringTrim'),
+                array('name' => 'StringTrim','name' => 'StripTags'),
             ),
         ));
 
