@@ -6,9 +6,11 @@ use Zend\Mvc\MvcEvent;
 
 class Module
 {
+   
     public function onBootstrap(MvcEvent $e)
     {
-        $e->getApplication()->getServiceManager()->get('translator');
+        $translator = $e->getApplication()->getServiceManager()->get('translator');
+       
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -36,6 +38,9 @@ class Module
     public function getServiceConfig()
     {
         return array(
+            'invokables' => array(
+                'my_image_service' => 'Imagine\Gd\Imagine',
+            ),
             'factories' => array(
                 'btitbase_configs' => function ($sm) {
                     $config = $sm->get('Config');
@@ -61,6 +66,12 @@ class Module
                     $locator = $sm->getServiceLocator(); 
                     return new View\Helper\AbsoluteUrl($locator->get('Request'));
                 },
+                'assets' => function ($sm) {
+                    $match = $sm->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
+                    $viewHelper = new View\Helper\Assets($match);
+                    return $viewHelper;
+                },
+         
             ),
          );
     }

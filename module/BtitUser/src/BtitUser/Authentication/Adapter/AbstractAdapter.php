@@ -4,7 +4,7 @@ namespace BtitUser\Authentication\Adapter;
 
 use Zend\Authentication\Storage;
 
-abstract class AbstractAdapter implements ChainableAdapter
+abstract class AbstractAdapter
 {
    
     protected $storage;

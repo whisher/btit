@@ -7,34 +7,20 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Stdlib\Hydrator;
-use BtitBase\EventManager\EventProvider;
+use ZfcBase\EventManager\EventProvider;
 use BtitUser\Entity\User as EntityUser;
 use BtitUser\Mapper\User as UserMapper;
 
 class User extends EventProvider implements ServiceManagerAwareInterface
 {
 
-    
     protected $userMapper;
-
-   
     protected $authService;
-
-    
     protected $loginForm;
-
-   
     protected $registerForm;
-
-    
     protected $changePasswordForm;
-
-    
     protected $serviceManager;
-
-    
-
-   protected $formHydrator;
+    protected $formHydrator;
 
     /**
      * createFromForm
@@ -58,7 +44,6 @@ class User extends EventProvider implements ServiceManagerAwareInterface
         $bcrypt = new Bcrypt();
         $bcrypt->setCost(14);
         $user->setPassword($bcrypt->create($user->getPassword()));
-        $user->setDisplayName($user->getFirstname().' '.$user->getSurname());
         $user->setState(0);
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user, 'form' => $form));
         $this->getUserMapper()->insert($user);

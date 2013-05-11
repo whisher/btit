@@ -1,7 +1,7 @@
 <?php
 namespace BtitUser\Form;
 
-use BtitBase\InputFilter\ProvidesEventsInputFilter;
+use ZfcBase\InputFilter\ProvidesEventsInputFilter;
 
 class LoginFilter extends ProvidesEventsInputFilter
 {

@@ -2,9 +2,11 @@
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
-        'BtitBase',
+        'ZfcBase',
         'BtitUser',
-        'ZfcAdmin'
+       /* 'BtitAcl',*/
+        'BtitBase',
+        'BtitAdmin'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

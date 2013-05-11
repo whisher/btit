@@ -5,7 +5,7 @@ namespace BtitUser\Controller\Plugin;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use BtitUser\Authentication\Adapter\AdapterChain as AuthAdapter;
+use BtitUser\Authentication\Adapter\Adapter as AuthAdapter;
 
 class BtitUserAuthentication extends AbstractPlugin
 {

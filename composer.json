@@ -9,6 +9,7 @@
     "homepage": "http://framework.zend.com/",
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "2.1.4"
+        "zendframework/zendframework": "2.1.4",
+        "imagine/Imagine": "0.3.*"
     }
 }

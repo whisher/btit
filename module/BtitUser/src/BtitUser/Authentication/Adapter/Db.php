@@ -7,14 +7,17 @@ use Zend\Authentication\Result as AuthenticationResult;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Crypt\Password\Bcrypt;
-use BtitUser\Authentication\Adapter\AdapterChainEvent as AuthEvent;
+use BtitUser\Authentication\Adapter\AdapterEvent as AuthEvent;
 use BtitUser\Mapper\User as UserMapperInterface;
+use BtitUser\Mapper\UserLogin as UserLoginMapperInterface;
+use BtitUser\Entity\UserLogin;
 
 class Db extends AbstractAdapter implements ServiceManagerAwareInterface
 {
     const COST = 14;
     
-    protected $mapper;
+    protected $userMapper;
+    protected $userLoginMapper;
     protected $serviceManager;
     protected $credentialsOptions = array('username','email');
     protected $notAllowedState = array('2'=>'A record with the supplied identity is not active.');
@@ -38,10 +41,10 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
             $mode = array_shift($fields);
             switch ($mode) {
                 case 'username':
-                    $userObject = $this->getMapper()->findByUsername($identity);
+                    $userObject = $this->getUserMapper()->findByUsername($identity);
                     break;
                 case 'email':
-                    $userObject = $this->getMapper()->findByEmail($identity);
+                    $userObject = $this->getUserMapper()->findByEmail($identity);
                     break;
             }
         }
@@ -79,24 +82,41 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
         $this->getStorage()->write($storage);
         $e->setCode(AuthenticationResult::SUCCESS)
           ->setMessages(array('Authentication successful.'));
+        $userLogin = new UserLogin();
+        $userLogin->setUserId($userObject->getId());
+        $this->getUserLoginMapper()->insert($userLogin);
     }
 
     
 
-    public function getMapper()
+    public function getUserMapper()
     {
-        if (null === $this->mapper) {
-            $this->setMapper($this->getServiceManager()->get('btituser_user_mapper'));
+        if (null === $this->userMapper) {
+            $this->setUserMapper($this->getServiceManager()->get('btituser_user_mapper'));
         }
-        return $this->mapper;
+        return $this->userMapper;
     }
 
-    protected function setMapper(UserMapperInterface $mapper)
+    protected function setUserMapper(UserMapperInterface $mapper)
     {
-        $this->mapper = $mapper;
+        $this->userMapper = $mapper;
         return $this;
     }
 
+    public function getUserLoginMapper()
+    {
+        if (null === $this->userLoginMapper) {
+            $this->setUserLoginMapper($this->getServiceManager()->get('btituser_userlogin_mapper'));
+        }
+        return $this->userLoginMapper;
+    }
+
+    protected function setUserLoginMapper(UserLoginMapperInterface $mapper)
+    {
+        $this->userLoginMapper = $mapper;
+        return $this;
+    }
+    
     public function getServiceManager()
     {
         return $this->serviceManager;
@@ -106,6 +126,4 @@ class Db extends AbstractAdapter implements ServiceManagerAwareInterface
     {
         $this->serviceManager = $serviceManager;
     }
-
-    
 }

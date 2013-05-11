@@ -35,35 +35,18 @@ class BtitUserDisplayName extends AbstractHelper
                 return false;
             }
         }
-
-        $displayName = $user->getDisplayName();
+        $displayName = $user->getUsername();
         if (null === $displayName) {
-            $displayName = $user->getUsername();
+             $displayName = $user->getFirstname().' '.$user->getSurname();
         }
-        if (null === $displayName) {
-            $displayName = $user->getEmail();
-            $displayName = substr($displayName, 0, strpos($displayName, '@'));
-        }
-
         return $displayName;
     }
 
-    /**
-     * Get authService.
-     *
-     * @return AuthenticationService
-     */
     public function getAuthService()
     {
         return $this->authService;
     }
 
-    /**
-     * Set authService.
-     *
-     * @param AuthenticationService $authService
-     * @return \ZfcUser\View\Helper\ZfcUserDisplayName
-     */
     public function setAuthService(AuthenticationService $authService)
     {
         $this->authService = $authService;

@@ -1,13 +1,9 @@
 <?php
 return array(
-    'view_manager' => array(
-        'template_path_stack' => array(
-            'btituser' => __DIR__ . '/../view',
-        ),
-    ),
+    
     'controllers' => array(
         'invokables' => array(
-            'btituser_controller' => 'BtitUser\Controller\UserController',
+            'BtitUser\Controller\UserController' => 'BtitUser\Controller\UserController',
         ),
     ),
     'router' => array(
@@ -18,7 +14,7 @@ return array(
                 'options' => array(
                     'route' => '/user',
                     'defaults' => array(
-                        'controller' => 'btituser_controller',
+                        'controller' => 'BtitUser\Controller\UserController',
                         'action'     => 'index',
                     ),
                 ),
@@ -29,7 +25,7 @@ return array(
                         'options' => array(
                             'route' => '/login',
                             'defaults' => array(
-                                'controller' => 'btituser_controller',
+                                'controller' => 'BtitUser\Controller\UserController',
                                 'action'     => 'login',
                             ),
                         ),
@@ -39,7 +35,7 @@ return array(
                         'options' => array(
                             'route' => '/authenticate',
                             'defaults' => array(
-                                'controller' => 'btituser_controller',
+                                'controller' => 'BtitUser\Controller\UserController',
                                 'action'     => 'authenticate',
                             ),
                         ),
@@ -49,7 +45,7 @@ return array(
                         'options' => array(
                             'route' => '/logout',
                             'defaults' => array(
-                                'controller' => 'btituser_controller',
+                                'controller' => 'BtitUser\Controller\UserController',
                                 'action'     => 'logout',
                             ),
                         ),
@@ -59,7 +55,7 @@ return array(
                         'options' => array(
                             'route' => '/register',
                             'defaults' => array(
-                                'controller' => 'btituser_controller',
+                                'controller' => 'BtitUser\Controller\UserController',
                                 'action'     => 'register',
                             ),
                         ),
@@ -69,7 +65,7 @@ return array(
                         'options' => array(
                             'route' => '/change-password',
                             'defaults' => array(
-                                'controller' => 'btituser_controller',
+                                'controller' => 'BtitUser\Controller\UserController',
                                 'action'     => 'changepassword',
                             ),
                         ),
@@ -85,7 +81,7 @@ return array(
                         'options' => array(
                             'route' => '/change-email',
                             'defaults' => array(
-                                'controller' => 'btituser_controller',
+                                'controller' => 'BtitUser\Controller\UserController',
                                 'action' => 'changeemail',
                             ),
                         ),
@@ -99,5 +95,10 @@ return array(
                 ),
             ),
         ),
-    )
+    ),
+    'view_manager' => array(
+        'template_path_stack' => array(
+            'btituser' => __DIR__ . '/../view',
+        ),
+    ),
 );

@@ -3,7 +3,7 @@ namespace BtitUser\Form;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
-use BtitBase\Form\ProvidesEventsForm;
+use ZfcBase\Form\ProvidesEventsForm;
 
 class Base extends ProvidesEventsForm
 {
@@ -34,17 +34,7 @@ class Base extends ProvidesEventsForm
             ),
         ));
         
-        $this->add(array(
-            'name' => 'username',
-            'options' => array(
-                'label' => 'User Name',
-            ),
-            'attributes' => array(
-                'type' => 'text',
-                'placeholder' => 'User Name'
-            ),
-        ));
-        
+       
         $this->add(array(
             'name' => 'email',
             'options' => array(

@@ -3,7 +3,7 @@ namespace BtitUser\Mapper;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use BtitBase\EventManager\EventProvider;
+use ZfcBase\EventManager\EventProvider;
 
 abstract class AbstractDbMapper extends EventProvider implements ServiceLocatorAwareInterface {
     

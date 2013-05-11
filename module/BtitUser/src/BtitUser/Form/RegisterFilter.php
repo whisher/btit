@@ -1,7 +1,7 @@
 <?php
 namespace BtitUser\Form;
 
-use BtitBase\InputFilter\ProvidesEventsInputFilter;
+use ZfcBase\InputFilter\ProvidesEventsInputFilter;
 
 class RegisterFilter extends ProvidesEventsInputFilter
 {
@@ -48,21 +48,6 @@ class RegisterFilter extends ProvidesEventsInputFilter
             ),
         ));
 
-        $this->add(array(
-            'name'       => 'username',
-            'required'   => true,
-            'filters'    => array(array('name' => 'StringTrim','name' => 'StripTags')),
-            'validators' => array(
-                array(
-                    'name'    => 'StringLength',
-                    'options' => array(
-                        'min' => 3,
-                        'max' => 255,
-                    ),
-                )
-            ),
-        ));
-        
         $this->add(array(
             'name'       => 'email',
             'required'   => true,

@@ -3,18 +3,18 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'btitbase_controller_base' => 'BtitBase\Controller\BaseController',
-            'btitbase_controller_test' => 'BtitBase\Controller\TestController'
+            'BtitBase\Controller\BaseController' => 'BtitBase\Controller\BaseController',
+            'BtitBase\Controller\TestController' => 'BtitBase\Controller\TestController'
         ),
     ),
     'router' => array(
         'routes' => array(
-            'home' => array(
+            'btitbase_route' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'btitbase_controller_base',
+                        'controller' => 'BtitBase\Controller\BaseController',
                         'action'     => 'index',
                     ),
                 ),
@@ -24,7 +24,7 @@ return array(
                 'options' => array(
                     'route'    => '/test',
                     'defaults' => array(
-                        'controller' => 'btitbase_controller_test',
+                        'controller' => 'BtitBase\Controller\TestController',
                         'action'     => 'index',
                     ),
                 ),
@@ -38,12 +38,12 @@ return array(
         ),
     ),
     'translator' => array(
-        'locale' => 'en_US',
+        'locale' => 'it_IT',
         'translation_file_patterns' => array(
             array(
-                'type'     => 'gettext',
+                'type'     => 'phpArray',
                 'base_dir' => __DIR__ . '/../language',
-                'pattern'  => '%s.mo',
+                'pattern'  => '%s.php',
             ),
         ),
     ),

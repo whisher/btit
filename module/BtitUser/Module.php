@@ -36,7 +36,7 @@ class Module
                 'btitUserAuthentication' => function ($sm) {
                     $serviceLocator = $sm->getServiceLocator();
                     $authService = $serviceLocator->get('btituser_auth_service');
-                    $authAdapter = $serviceLocator->get('btituser_auth_adapter_chain');
+                    $authAdapter = $serviceLocator->get('btituser_auth_adapter_factory');
                     $controllerPlugin = new Controller\Plugin\BtitUserAuthentication;
                     $controllerPlugin->setAuthService($authService);
                     $controllerPlugin->setAuthAdapter($authAdapter);
@@ -74,10 +74,10 @@ class Module
                'btituser_auth_service' => function ($sm) {
                     return new \Zend\Authentication\AuthenticationService(
                         $sm->get('btituser_auth_storage'),
-                        $sm->get('btituser_auth_adapter_chain')
+                        $sm->get('btituser_auth_adapter_factory')
                     );
                 },
-               'btituser_auth_adapter_chain' => 'BtitUser\Authentication\Adapter\AdapterChainServiceFactory',
+               'btituser_auth_adapter_factory' => 'BtitUser\Authentication\Adapter\AdapterServiceFactory',
                'btituser_login_form' => function($sm) {
                     $form = new Form\Login('frm-login');
                     $form->setInputFilter(new Form\LoginFilter());
@@ -108,6 +108,21 @@ class Module
                 }, 
                 'btituser_user_hydrator' => function ($sm) {
                     $hydrator = new Mapper\UserHydrator();
+                    return $hydrator;
+                },
+                'btituser_userlogin_mapper' => function ($sm) {
+                    $tableGateway = $sm->get('btituser_userlogin_table_gateway');
+                    return  new Mapper\UserLogin($tableGateway);
+                }, 
+                'btituser_userlogin_table_gateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $hydrator  = $sm->get('btituser_userlogin_hydrator');
+                    $rowObjectPrototype = new Entity\UserLogin();
+                    $resultSet  = new HydratingResultSet($hydrator, $rowObjectPrototype);
+                    return new TableGateway('user_login',$dbAdapter,null,$resultSet);
+                }, 
+                'btituser_userlogin_hydrator' => function ($sm) {
+                    $hydrator = new Mapper\UserLoginHydrator();
                     return $hydrator;
                 },
             ),
